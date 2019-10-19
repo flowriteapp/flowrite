@@ -10,7 +10,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "test" : "eslint *.js src/*",
+    "test" : "eslint *.js src/*"" && "rescripts test",
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",
@@ -19,7 +19,7 @@
   "rescripts": [
     "env"
   ],
-  "homepage": "http://./",
+  "homepage": "./",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -46,7 +46,6 @@
     "eslint-plugin-import": "^2.18.2",
     "wait-on": "^3.3.0"
   },
-  "description": "## Prerequisites",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flowriteapp/flowrite.git"
