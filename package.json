@@ -10,7 +10,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "test": "eslint src/* && rescripts test",
+    "test": "eslint src/*.js && rescripts test",
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",
@@ -38,12 +38,16 @@
   "devDependencies": {
     "@rescripts/cli": "0.0.12",
     "@rescripts/rescript-env": "0.0.10",
+    "babel-eslint": "^10.0.3",
     "concurrently": "^5.0.0",
     "electron": "^6.0.12",
     "electron-builder": "^21.2.0",
     "eslint": "^6.5.1",
+    "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.16.0",
     "wait-on": "^3.3.0"
   },
   "repository": {
