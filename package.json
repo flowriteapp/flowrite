@@ -10,7 +10,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "test" : "eslint src/* && rescripts test",
+    "test": "eslint src/* && rescripts test",
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",
