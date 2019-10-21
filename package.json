@@ -12,7 +12,8 @@
     "electron-store": "5.0.0"
   },
   "scripts": {
-    "test": "eslint src/*.js && rescripts test",
+    "test": "npm run lint && rescripts test",
+    "lint": "eslint src/*.jsx",
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",
