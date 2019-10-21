@@ -3,6 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
+  "author": {
+    "name": "AASMRR"
+  },
+  "build": {
+    "appId": "com.my-website.flowrite",
+    "productName": "Flowrite",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
   "dependencies": {
     "bulma": "^0.8.0",
     "electron-is-dev": "^1.1.0",
@@ -17,7 +35,10 @@
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\""
+    "electron-dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "build -mw"
   },
   "rescripts": [
     "env"
@@ -45,6 +66,7 @@
     "concurrently": "^5.0.0",
     "electron": "^6.0.12",
     "electron-builder": "^21.2.0",
+    "typescript": "^3.6.4",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
