@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
+import 'bulma';
 import './App.css';
 
 function App() {
@@ -18,6 +19,21 @@ function App() {
         >
           Learn React
         </a>
+        <br />
+        <div className="columns">
+          <div className="column has-background-primary">
+            First
+          </div>
+          <div className="column has-background-primary">
+            Second
+          </div>
+          <div className="column has-background-primary">
+            Third
+          </div>
+          <div className="column has-background-primary">
+            Fourth
+          </div>
+        </div>
       </header>
     </div>
   );
