@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
-  "author": {
-    "name": "AASMRR"
-  },
+  "author": "AASMRR",
   "build": {
     "appId": "com.my-website.flowrite",
     "productName": "Flowrite",
@@ -37,8 +35,8 @@
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "electron-pack": "build -mw"
+    "preelectron-pack": "npm run build",
+    "electron-pack": "electron-builder -m"
   },
   "rescripts": [
     "env"
@@ -66,13 +64,13 @@
     "concurrently": "^5.0.0",
     "electron": "^6.0.12",
     "electron-builder": "^21.2.0",
-    "typescript": "^3.6.4",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
+    "typescript": "^3.6.4",
     "wait-on": "^3.3.0"
   },
   "repository": {
@@ -80,7 +78,6 @@
     "url": "git+https://github.com/flowriteapp/flowrite.git"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/flowriteapp/flowrite/issues"
