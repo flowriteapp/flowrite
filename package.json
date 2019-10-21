@@ -66,16 +66,13 @@
     "concurrently": "^5.0.0",
     "electron": "^6.0.12",
     "electron-builder": "^21.2.0",
-<<<<<<< HEAD
     "typescript": "^3.6.4",
-=======
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
->>>>>>> 6b2b2c9c68afc63021ab5ffa44cc7026ed679c27
     "wait-on": "^3.3.0"
   },
   "repository": {
