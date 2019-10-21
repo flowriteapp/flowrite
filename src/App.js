@@ -1,11 +1,15 @@
 import React from 'react';
+<<<<<<< HEAD
 import logo from './logo.svg';
 import 'bulma';
+=======
+>>>>>>> a98b3c52052cf82051fc6f2c3666a1671c500fca
 import './App.css';
 
 function App() {
   return (
     <div className="App">
+<<<<<<< HEAD
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -35,8 +39,36 @@ function App() {
           </div>
         </div>
       </header>
+=======
+      <Document className="test"> </Document>
+>>>>>>> a98b3c52052cf82051fc6f2c3666a1671c500fca
     </div>
   );
+}
+
+class Document extends React.Component{
+  createDocument(){
+
+  }
+  updateDocument(){
+
+  }
+  deleteDocument(){
+
+  }
+  saveDocument(){
+
+  }
+  exportDocument(){
+    
+  }
+  render(){
+    return(
+      <div className="docMain">
+        <p>DOCTEST</p>
+      </div>
+    );
+  }
 }
 
 export default App;

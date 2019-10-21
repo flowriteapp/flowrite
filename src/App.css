@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #282c34;
 }
 
 .App-logo {
@@ -21,7 +22,12 @@
   color: #09d3ac;
 }
 
+<<<<<<< HEAD
 .column {
   margin-left: 5px;
   margin-right: 5px;
+=======
+.test {
+  background-color: #667596;
+>>>>>>> a98b3c52052cf82051fc6f2c3666a1671c500fca
 }
