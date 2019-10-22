@@ -1,5 +1,7 @@
 # FloWrite
 
+Watch your distractions vanish
+
 ## Prerequisites
 
 You will need the following installed:
