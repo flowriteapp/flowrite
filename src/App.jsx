@@ -33,7 +33,7 @@ function App() {
   const [docStorage, setDocStorage] = useState(['hi', 'hello']);
   const [selectedDocument, selectDocument] = useState(0);
 
-  function createDocument() {
+  function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, '']);
     return docStorage.length - 1;
   }
@@ -54,7 +54,7 @@ function App() {
         }
         return val;
       }));
-    }
+    };
   }
 
   return (
