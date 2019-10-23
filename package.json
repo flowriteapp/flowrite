@@ -21,11 +21,13 @@
   },
   "dependencies": {
     "bulma": "^0.8.0",
+    "classnames": "^2.2.6",
     "electron-is-dev": "^1.1.0",
+    "electron-store": "5.0.0",
     "react": "^16.10.2",
+    "react-contenteditable": "^3.3.2",
     "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0",
-    "electron-store": "5.0.0"
+    "react-scripts": "3.2.0"
   },
   "scripts": {
     "test": "npm run lint && rescripts test",
