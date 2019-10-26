@@ -9,7 +9,7 @@ function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
 
   const handleChange = () => {
-    updateDocument(docRef.current.textContent.trim());
+    updateDocument(docRef.current.textContent.trimLeft());
   };
 
   const html = (d) => d;
