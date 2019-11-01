@@ -9,10 +9,16 @@ function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
 
   const handleChange = () => {
-    updateDocument(docRef.current.textContent.trimLeft());
+    updateDocument(docRef.current.innerText.trimLeft());
   };
 
-  const html = (d) => d;
+  const html = (d) => {
+    const len = 10;
+    if (d.length < len) {
+      return `<span class="has-text-black">${d}</span>`;
+    }
+    return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
+  };
 
   return (
     <div className="panel container" style={{ padding: '1.5rem 1.5rem' }}>
