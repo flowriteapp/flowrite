@@ -108,7 +108,7 @@ function App() {
                   role="navigation"
                   key={index}
                 >
-                  {ls('doclist')[index]}
+                  {ls('doclist') != null ? ls('doclist') : str}
                 </a>
               );
             })}
