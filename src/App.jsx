@@ -39,34 +39,33 @@ function DocumentEditor({ document, updateDocument }) {
 function useLocalStorage(key, initialValue) {
   const [storedValue, setStorageValue] = useState(() => {
     try {
-      let item = ls(key);
+      const item = ls(key);
       return item != null ? item : initialValue;
-    }catch(e){return initialValue;}
+    } catch (e){ return initialValue; }
   });
 
-  const setValue = value => {
+  const setValue = (value) => {
     try {
-      const valToStore = 
-        value instanceof Function ? value(storedValue) : value;
-      setStorageValue(valToStore);
-      ls(key, valToStore);
-    }catch(e){}
-  }
+
+
+      setStorageValue(value);
+      ls(key, value);
+    } catch (e){ 
+      //do something with error 
+    }
+  };
   return [storedValue, setValue];
 }
 
 
 function App() {
-  //key == value in local storage
+  // key == value in local storage
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
   const [selectedDocument, selectDocument] = useState(0);
-  ls("wow", "w");
 
   function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, '']);
-    let index = docStorage.length - 1;
-    
-    return index;
+    return docStorage.length - 1;
   }
 
   function getDocument(id) {
