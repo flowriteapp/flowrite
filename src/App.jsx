@@ -111,7 +111,7 @@ function App() {
                   role="navigation"
                   key={index}
                 >
-                  { str }, {ls('doclist')[0]}
+                  {ls('doclist')[index]}
                 </a>
               );
             })}
