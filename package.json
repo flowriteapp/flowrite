@@ -27,7 +27,8 @@
     "react": "^16.10.2",
     "react-contenteditable": "^3.3.2",
     "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "local-storage": "2.0.0"
   },
   "scripts": {
     "test": "npm run lint && rescripts test",

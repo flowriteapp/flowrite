@@ -4,6 +4,7 @@ import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import 'bulma/css/bulma.css';
 import './styles/App.css';
+import ls from 'local-storage';
 
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
@@ -36,7 +37,26 @@ function DocumentEditor({ document, updateDocument }) {
 
 
 function App() {
-  const [docStorage, setDocStorage] = useState(['hi', 'hello']);
+  // key == value in local storage
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStorageValue] = useState(() => {
+      try {
+        const item = ls(key);
+        return item != null ? item : initialValue;
+      } catch (e) { return initialValue; }
+    });
+
+    const setValue = (value) => {
+      try {
+        setStorageValue(value);
+        ls(key, value);
+      } catch (e) {
+        // do something with error
+      }
+    };
+    return [storedValue, setValue];
+  }
+  const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
@@ -86,7 +106,7 @@ function App() {
                   role="navigation"
                   key={index}
                 >
-                  { str }
+                  {ls('doclist') != null ? ls('doclist')[index] : str}
                 </a>
               );
             })}
