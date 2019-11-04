@@ -41,17 +41,15 @@ function useLocalStorage(key, initialValue) {
     try {
       const item = ls(key);
       return item != null ? item : initialValue;
-    } catch (e){ return initialValue; }
+    } catch (e) { return initialValue; }
   });
 
   const setValue = (value) => {
     try {
-
-
       setStorageValue(value);
       ls(key, value);
-    } catch (e){ 
-      //do something with error 
+    } catch (e) {
+      // do something with error
     }
   };
   return [storedValue, setValue];
