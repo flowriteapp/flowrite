@@ -36,28 +36,27 @@ function DocumentEditor({ document, updateDocument }) {
   );
 }
 
-function useLocalStorage(key, initialValue) {
-  const [storedValue, setStorageValue] = useState(() => {
-    try {
-      const item = ls(key);
-      return item != null ? item : initialValue;
-    } catch (e) { return initialValue; }
-  });
-
-  const setValue = (value) => {
-    try {
-      setStorageValue(value);
-      ls(key, value);
-    } catch (e) {
-      // do something with error
-    }
-  };
-  return [storedValue, setValue];
-}
-
 
 function App() {
   // key == value in local storage
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStorageValue] = useState(() => {
+      try {
+        const item = ls(key);
+        return item != null ? item : initialValue;
+      } catch (e) { return initialValue; }
+    });
+
+    const setValue = (value) => {
+      try {
+        setStorageValue(value);
+        ls(key, value);
+      } catch (e) {
+        // do something with error
+      }
+    };
+    return [storedValue, setValue];
+  }
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
   const [selectedDocument, selectDocument] = useState(0);
 
