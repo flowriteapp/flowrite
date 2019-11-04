@@ -4,6 +4,7 @@ import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import 'bulma/css/bulma.css';
 import './styles/App.css';
+
 const ls = require('local-storage');
 
 function DocumentEditor({ document, updateDocument }) {
@@ -36,7 +37,6 @@ function DocumentEditor({ document, updateDocument }) {
 }
 
 function useLocalStorage(key, initialValue) {
-  //const ls = require('local-storage');
   const [storedValue, setStorageValue] = useState(() => {
     try {
       let item = ls(key);
@@ -57,9 +57,10 @@ function useLocalStorage(key, initialValue) {
 
 
 function App() {
+  //key == value in local storage
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
-  const [selectedDocument, selectDocument] = useLocalStorage(0, 0);
-  
+  const [selectedDocument, selectDocument] = useState(0);
+  ls("wow", "w");
 
   function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, '']);
@@ -110,7 +111,7 @@ function App() {
                   role="navigation"
                   key={index}
                 >
-                  { str }
+                  { str }, {ls('doclist')[0]}
                 </a>
               );
             })}
