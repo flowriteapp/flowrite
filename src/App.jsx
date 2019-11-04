@@ -4,8 +4,7 @@ import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import 'bulma/css/bulma.css';
 import './styles/App.css';
-
-const ls = require('local-storage');
+import ls from 'local-storage';
 
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
