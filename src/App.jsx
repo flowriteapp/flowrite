@@ -6,26 +6,30 @@ import 'bulma/css/bulma.css';
 import './styles/App.css';
 import ls from 'local-storage';
 
-function DocumentEditor({ document, updateDocument }) {
+function DocumentEditor({ document, updateDocument, vanishDisabled }) {
   const docRef = useRef(null);
 
   const handleChange = () => {
     updateDocument(docRef.current.innerText.trimLeft());
   };
 
-  const html = (d) => {
+  const html = (d, vanish) => {
     const len = 10;
     if (d.length < len) {
       return `<span class="has-text-black">${d}</span>`;
     }
-    return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
+    if(!(vanish)){
+      return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
+    }else{
+      return `<span class="has-text-black">${d}</span>`;
+    }
   };
 
   return (
     <div className="panel container" style={{ padding: '1.5rem 1.5rem' }}>
       <ContentEditable
         innerRef={docRef}
-        html={html(document) || '&nbsp;'}
+        html={html(document, vanishDisabled) || '&nbsp;'}
         style={{ outline: '0px solid transparent', whiteSpace: 'pre-wrap' }}
         disabled={false}
         onChange={handleChange}
@@ -82,11 +86,22 @@ function App() {
       }));
     };
   }
+  let disableVanish = 1;
+  let toggleText = "Disable Vanish";
+  function toggleVanish () {
+    disableVanish = disableVanish === 0 ? 1 : 0;
+    toggleText = disableVanish === 0 ? toggleText : "Enable Vanish";
+  }
 
   return (
     <section className="section App container">
       <div className="columns">
         <div className="column is-one-quarter">
+            <button 
+              className="button is-small"
+              onClick={toggleVanish()}> 
+              {toggleText}
+            </button>
           <nav className="panel">
             <p className="panel-heading has-text-centered">
               documents
@@ -116,6 +131,7 @@ function App() {
           <DocumentEditor
             document={getDocument(selectedDocument)}
             updateDocument={updateDocument(selectedDocument)}
+            vanishDisabled = {disableVanish}
           />
         </div>
       </div>
