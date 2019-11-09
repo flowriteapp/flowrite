@@ -67,7 +67,7 @@ function App(props) {
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
-    setDocStorage([...docStorage, '']);
+    setDocStorage([...docStorage, 'asdf']);
     return docStorage.length - 1;
   }
 
@@ -116,6 +116,13 @@ function App(props) {
               </a>
             );
           })}
+          <a
+            className="panel-block has-background-success has-text-white"
+            role="navigation"
+            onClick={createDocument}
+          >
+              new document
+          </a>
           <a
             className="panel-block has-background-danger has-text-white"
             role="navigation"
