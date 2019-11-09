@@ -13,7 +13,7 @@ function Auth(props) {
 
   const { firebase } = props;
 
-  if (firebase.auth.currentUser) {
+  if (firebase && firebase.auth.currentUser) {
     history.push('/docs');
   }
 

@@ -3,14 +3,14 @@ import app from 'firebase/app';
 import 'firebase/auth';
 
 const config = {
-  apiKey: "AIzaSyChh73lN4WCmHebNppsKQ4oSi_icoYm71o",
-  authDomain: "flowriteapp.firebaseapp.com",
-  databaseURL: "https://flowriteapp.firebaseio.com",
-  projectId: "flowriteapp",
-  storageBucket: "flowriteapp.appspot.com",
-  messagingSenderId: "494871235695",
-  appId: "1:494871235695:web:34eb0bdc7b63bc663e519a",
-  measurementId: "G-L5LML9BZ6Y"
+  apiKey: 'AIzaSyChh73lN4WCmHebNppsKQ4oSi_icoYm71o',
+  authDomain: 'flowriteapp.firebaseapp.com',
+  databaseURL: 'https://flowriteapp.firebaseio.com',
+  projectId: 'flowriteapp',
+  storageBucket: 'flowriteapp.appspot.com',
+  messagingSenderId: '494871235695',
+  appId: '1:494871235695:web:34eb0bdc7b63bc663e519a',
+  measurementId: 'G-L5LML9BZ6Y'
 };
 
 class Firebase {
