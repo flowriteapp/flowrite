@@ -7,10 +7,11 @@ import { withFirebase } from '../components/with-firebase';
 
 function Auth(props) {
   const { firebase } = props;
-  const [user, initialising, error] = useAuthState(firebase.auth());
+  const [user, initialising, err] = useAuthState(firebase.auth());
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [register, setRegister] = useState(true);
+  const [error, setError] = useState('');
   const history = useHistory();
 
   useEffect(() => {
@@ -21,14 +22,27 @@ function Auth(props) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (register) {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        history.push('/docs');
+      } catch (er) {
+        if (er.code === 'auth/email-already-in-use') {
+          setError('You already have an account, please click the sign in button below!');
+        } else {
+          setError(er.message);
+        }
+      }
     } else {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+        history.push('/docs');
+      } catch (er) {
+        setError(er.message);
+      }
     }
-
-    history.push('/docs');
   };
 
   if (initialising) {
@@ -43,12 +57,12 @@ function Auth(props) {
     );
   }
 
-  if (error) {
+  if (err) {
     return (
       <section className="section is-medium">
         <div className="columns has-text-centered is-vcentered">
           <div className="column is-12">
-            <p className="is-size-3">Error: {error}</p>
+            <p className="is-size-3">Error: {err}</p>
           </div>
         </div>
       </section>
@@ -66,9 +80,10 @@ function Auth(props) {
               </figure>
               <h1 className="title">Welcome to FloWrite</h1>
               <p className="subtitle is-6">
-                    Journal without distractions
+                Journal without distractions
               </p>
               <form onSubmit={onSubmit}>
+                { error ? (<p className="has-text-danger is-uppercase">{ error } <br /><br /></p>) : null}
                 <div className="field">
                   <div className="control">
                     <input className="input" type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
