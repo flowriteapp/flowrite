@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "npm run lint && rescripts test",
-    "lint": "eslint src/*.jsx",
+    "lint": "eslint src --ext js,jsx",
     "start": "rescripts start",
     "build": "rescripts build",
     "eject": "react-scripts eject",

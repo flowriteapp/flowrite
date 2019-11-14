@@ -40,7 +40,9 @@ function DocumentEditor({ document, updateDocument }) {
 function App(props) {
   const history = useHistory();
 
-  if (!props.firebase.auth.currentUser) {
+  const { firebase } = props;
+
+  if (!firebase.auth.currentUser) {
     history.push('/');
   }
 
