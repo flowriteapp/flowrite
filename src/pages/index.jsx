@@ -1,35 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { withFirebase } from '../components/with-firebase';
 
 
 function Auth(props) {
+  const { firebase } = props;
+  const [user, initialising, error] = useAuthState(firebase.auth());
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [register, setRegister] = useState(true);
   const history = useHistory();
 
-  const { firebase } = props;
-
   useEffect(() => {
-    if (firebase && firebase.auth.currentUser) {
+    if (user) {
       history.push('/docs');
     }
   });
-
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
     if (register) {
-      await props.firebase.doCreateUserWithEmailAndPassword(email, password);
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
     } else {
-      await props.firebase.doSignInWithEmailAndPassword(email, password);
+      await firebase.auth().signInWithEmailAndPassword(email, password);
     }
 
     history.push('/docs');
   };
+
+  if (initialising) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">loading...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">Error: {error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div>

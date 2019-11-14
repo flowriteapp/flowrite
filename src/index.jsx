@@ -6,7 +6,7 @@ import './styles/index.css';
 import App from './App';
 
 ReactDOM.render(
-  <FirebaseContext.Provider value={new Firebase()}>
+  <FirebaseContext.Provider value={Firebase}>
     <App />
   </FirebaseContext.Provider>,
   document.getElementById('root'),
