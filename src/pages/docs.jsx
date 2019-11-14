@@ -4,6 +4,7 @@ import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import ls from 'local-storage';
 import { useHistory, withRouter } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -39,8 +40,11 @@ function DocumentEditor({ document, updateDocument }) {
 
 function App(props) {
   const history = useHistory();
+  const { firebase } = props;
 
-  if (!props.firebase.auth.currentUser) {
+  const [user, initialising, error] = useAuthState(firebase.auth());
+
+  if (!user) {
     history.push('/');
   }
 
@@ -90,6 +94,30 @@ function App(props) {
     };
   }
 
+  if (initialising) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">loading...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">Error: {error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="columns">
       <div className="column is-one-quarter">
@@ -127,7 +155,7 @@ function App(props) {
             className="panel-block has-background-danger has-text-white"
             role="navigation"
             onClick={async () => {
-              await props.firebase.doSignOut();
+              await firebase.auth().signOut();
               history.push('/');
             }}
           >

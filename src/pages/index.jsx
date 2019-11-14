@@ -1,48 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { withFirebase } from '../components/with-firebase';
 
 
 function Auth(props) {
-  const [emailRegister, setEmailRegister] = useState('');
-  const [passwordRegister, setPasswordRegister] = useState('');
-  const [emailLogin, setEmailLogin] = useState('');
-  const [passwordLogin, setPasswordLogin] = useState('');
+  const { firebase } = props;
+  const [user, initialising, err] = useAuthState(firebase.auth());
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [register, setRegister] = useState(true);
+  const [error, setError] = useState('');
   const history = useHistory();
 
-  const { firebase } = props;
+  useEffect(() => {
+    if (user) {
+      history.push('/docs');
+    }
+  });
 
-  if (firebase && firebase.auth.currentUser) {
-    history.push('/docs');
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (register) {
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        history.push('/docs');
+      } catch (er) {
+        if (er.code === 'auth/email-already-in-use') {
+          setError('You already have an account, please click the sign in button below!');
+        } else {
+          setError(er.message);
+        }
+      }
+    } else {
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+        history.push('/docs');
+      } catch (er) {
+        setError(er.message);
+      }
+    }
+  };
+
+  if (initialising) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">loading...</p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
-  const onSubmitLogin = async (e) => {
-    e.preventDefault();
-    await props.firebase.doSignInWithEmailAndPassword(emailLogin, passwordLogin);
-    history.push('/docs');
-  };
-
-  const onSubmitRegister = async (e) => {
-    e.preventDefault();
-    await props.firebase.doCreateUserWithEmailAndPassword(emailRegister, passwordRegister);
-    history.push('/docs');
-  };
+  if (err) {
+    return (
+      <section className="section is-medium">
+        <div className="columns has-text-centered is-vcentered">
+          <div className="column is-12">
+            <p className="is-size-3">Error: {err}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div>
-      <form onSubmit={onSubmitLogin}>
-        <input type="email" onChange={(e) => setEmailLogin(e.target.value)} />
-        <input type="password" onChange={(e) => setPasswordLogin(e.target.value)} />
-        <input type="submit" value="login" />
-      </form>
-      <form onSubmit={onSubmitRegister}>
-        <input type="email" onChange={(e) => setEmailRegister(e.target.value)} />
-        <input type="password" onChange={(e) => setPasswordRegister(e.target.value)} />
-        <input type="submit" value="signup" />
-      </form>
+      <section className="section is-medium">
+        <div className="columns is-desktop is-vcentered">
+          <div className="column is-4 is-offset-one-third has-background-white">
+            <div className="container is-fluid has-text-centered">
+              <figure className="image is-96x96 is-inline-block">
+                <img src="images/flowrite.jpg" alt="FloWrite logo" />
+              </figure>
+              <h1 className="title">Welcome to FloWrite</h1>
+              <p className="subtitle is-6">
+                Journal without distractions
+              </p>
+              <form onSubmit={onSubmit}>
+                { error ? (<p className="has-text-danger is-uppercase">{ error } <br /><br /></p>) : null}
+                <div className="field">
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                  </div>
+                </div>
+                <div className="field">
+                  <div className="control">
+                    <input className="input" type="password" placeholder="Create a password" onChange={(e) => setPassword(e.target.value)} />
+                  </div>
+                </div>
+                <div className="buttons">
+                  { register ? (
+                    <button type="submit" className="button is-fullwidth is-link">Register</button>
+                  ) : (
+                    <button type="submit" className="button is-fullwidth is-link">Sign in</button>
+                  )}
+                </div>
+                <p className="subtitle is-link is-6">
+                  { register ? (
+                    <a className="login has-text-link" role="signin" onClick={() => setRegister(false)}>Already a member? Click here.</a>
+                  ) : (
+                    <a className="login has-text-link" role="register" onClick={() => setRegister(true)}>Need to make an account? Click here.</a>
+                  ) }
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
-export default withRouter(withFirebase(Auth));
+export default withFirebase(withRouter(Auth));

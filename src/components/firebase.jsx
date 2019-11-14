@@ -10,28 +10,29 @@ const config = {
   storageBucket: 'flowriteapp.appspot.com',
   messagingSenderId: '494871235695',
   appId: '1:494871235695:web:34eb0bdc7b63bc663e519a',
-  measurementId: 'G-L5LML9BZ6Y'
+  measurementId: 'G-L5LML9BZ6Y',
 };
 
-class Firebase {
-  constructor() {
-    app.initializeApp(config);
-    this.auth = app.auth();
-  }
+app.initializeApp(config);
+// class Firebase {
+//   constructor() {
+//     this.app = app;
+//     this.auth = app.auth();
+//   }
 
-  doCreateUserWithEmailAndPassword = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
+//   doCreateUserWithEmailAndPassword = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
 
-  doSignInWithEmailAndPassword = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
+//   doSignInWithEmailAndPassword = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 
-  doSignOut = () => this.auth.signOut();
+//   doSignOut = () => this.auth.signOut();
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+//   doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
 
-  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
-}
+//   doPasswordUpdate = (password) => this.auth.currentUser.updatePassword(password);
+// }
 
 
 const FirebaseContext = React.createContext(null);
 
-export default Firebase;
+export default app;
 export { FirebaseContext };
