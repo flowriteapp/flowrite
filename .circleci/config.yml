@@ -31,10 +31,21 @@ jobs:
 
       # run tests!
       - run: npm test
-
+      
+  build:
+    macos:
+      xcode: '10.3.0'
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn electron-pack
+      - run: mv dist/*.dmg dist/Flowrite.dmg
+      - store_artifacts:
+          path: dist/Flowrite.dmg      
+    
 workflows:
   version: 2
   main:
     jobs:
       - test
-      
+      - build
