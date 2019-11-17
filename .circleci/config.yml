@@ -32,10 +32,14 @@ jobs:
       # run tests!
       - run: npm test
       
-      # run yarn to install package
-      - run: yarn
-      - run: yarn electron-pack
-      - run: mv dist/*.dmg Flowrite.dmg
+      # run build
+      - run: npm run build
+      
+      # run package installation
+      - run: npm run electron-pack
+      
+      # create a concise package
+      - run: mv dist/*.dmg dist/Flowrite.dmg
       
       # store artifacts
       - store_artifacts:
