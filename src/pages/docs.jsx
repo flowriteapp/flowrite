@@ -44,11 +44,13 @@ function App(props) {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
+
   if (!user) {
     history.push('/');
   }
 
   // key == value in local storage
+  //includes firebase
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
@@ -59,6 +61,9 @@ function App(props) {
 
     const setValue = (value) => {
       try {
+        firebase.database().ref(user).set({
+          
+        });
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
