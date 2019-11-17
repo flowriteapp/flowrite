@@ -31,6 +31,15 @@ jobs:
 
       # run tests!
       - run: npm test
+      
+      # run yarn to install package
+      - run: yarn
+      - run: yarn electron-pack
+      - run: mv dist/*.dmg Flowrite.dmg
+      
+      # store artifacts
+      - store_artifacts:
+          path: dist/Flowrite.dmg
 
 workflows:
   version: 2
