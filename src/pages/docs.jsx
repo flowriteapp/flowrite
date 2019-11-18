@@ -45,41 +45,42 @@ function App(props) {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
-  
+
   // uListReference.set({
   //   'uid' : '' + user.uid,
   //   'documents' : docStorage
   // });
-  
-  
-  
-  //const [snapshots, loading, errorls] = useList(uListReference);
+
+
+  // const [snapshots, loading, errorls] = useList(uListReference);
 
   if (!user) {
     history.push('/');
   }
-
+  const lsTimeStamp = 0;
+  const fbTimeStamp = 0;
   // key == value in local storage
-  //includes firebase
+  // includes firebase
   function useLocalStorage(key, initialValue) {
+    const fbUserRef = firebase.database().ref(`users/${user.uid}`);
     const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
-        let fbUserRef = firebase.database().ref("users/" + user.uid);
         let fbItem;
-        fbUserRef.once('value', function(snap){
-          fbItem = snap.val();
-        });
-        
-        return lsItem != null ? lsItem : initialValue;
+        firebase.database().ref(`users/${user.uid}`).on('value',
+          (snapshot) => {
+            fbItem = snapshot.val();
+          });
+
+        return fbItem != null ? fbItem : (lsItem != null ? lsItem : initialValue);
       } catch (e) { return initialValue; }
     });
 
     const setValue = (value) => {
       try {
-        //firebase.database().ref("users/" + user.uid);
-        firebase.database().ref('users/' + user.uid).set({
-          'documents' : value
+        // firebase.database().ref("users/" + user.uid);
+        firebase.database().ref(`users/${user.uid}`).set({
+          documents: value,
         });
         setStorageValue(value);
         ls(key, value);
@@ -89,13 +90,14 @@ function App(props) {
     };
     return [storedValue, setValue];
   }
-  
+
+
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
-  
+
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
-    setDocStorage([...docStorage, 'asdf']);
+    setDocStorage([...docStorage, 'new document']);
     return docStorage.length - 1;
   }
 
