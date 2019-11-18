@@ -20,6 +20,8 @@ function DocumentEditor({ document, updateDocument }) {
     return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
   };
 
+  const [enabled, setEnabled] = useState(true);
+
   return (
     <div className="panel container" style={{ padding: '1.5rem 1.5rem' }}>
       <ContentEditable
@@ -38,6 +40,7 @@ function DocumentEditor({ document, updateDocument }) {
 function App() {
   const [docStorage, setDocStorage] = useState(['hi', 'hello']);
   const [selectedDocument, selectDocument] = useState(0);
+}
 
   function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, '']);
@@ -63,6 +66,18 @@ function App() {
     };
   }
 
+  useEffect(() => {
+    if(enabled == true){
+      return  `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`
+    }
+    else{
+      return `<span class="has-text-black">${d}</span>`
+    }
+  });
+
+  
+
+
   return (
     <section className="section App container">
       <div className="columns">
@@ -71,6 +86,9 @@ function App() {
             <p className="panel-heading has-text-centered">
               documents
             </p>
+            <button onClick={() => setEnabled(!enabled)}>
+            Fading Toggle
+            </button>
             { getDocuments().map((doc, index) => {
               let str = doc.split('\n')[0].trim();
               let newDoc = false;
