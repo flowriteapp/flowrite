@@ -60,11 +60,11 @@ function App(props) {
         let fbItem;
         // const [snapshots, loading, errorls] =
         //   useList(firebase.database().ref('users/' + user.uid));
-        const usrpath = 'users/${user.uid}';
+        const usrpath = `users/${user.uid}`;
         firebase.database().ref(usrpath).on('value', const snap = (snapshot) => {
-          const docPath = 'users/${user.uid}/documents';
+          const docPath = `users/${user.uid}/documents`;
           fbItem = snapshot.child(docPath).val();
-          const timestampPath = 'users/${user.uid}/timestamp';
+          const timestampPath = `users/${user.uid}/timestamp`;
           // fbTimeStamp = snapshot.child(timestampPath).val();
         });
         const lsOrInit = lsItem != null ? lsItem : initialValue;
@@ -75,7 +75,7 @@ function App(props) {
     const setValue = (value) => {
       try {
         // firebase.database().ref("users/" + user.uid);
-        const usrpath = 'users/${user.uid}';
+        const usrpath = `users/${user.uid}`;
         firebase.database().ref(usrpath).set({
           documents: value,
           timestamp: Date.now(),
