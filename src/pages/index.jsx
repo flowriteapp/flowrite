@@ -103,9 +103,9 @@ function Auth(props) {
                 </div>
                 <p className="subtitle is-link is-6">
                   { register ? (
-                    <a className="login has-text-link" role="signin" onClick={() => setRegister(false)}>Already a member? Click here.</a>
+                    <a href="#" className="login has-text-link" role="button" onClick={() => setRegister(false)}>Already a member? Click here.</a>
                   ) : (
-                    <a className="login has-text-link" role="register" onClick={() => setRegister(true)}>Need to make an account? Click here.</a>
+                    <a href="#" className="login has-text-link" role="button" onClick={() => setRegister(true)}>Need to make an account? Click here.</a>
                   ) }
                 </p>
               </form>

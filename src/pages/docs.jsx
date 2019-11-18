@@ -134,10 +134,11 @@ function App(props) {
             }
             return (
               <a
+                href=""
                 className={classnames('panel-block', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
                 onClick={() => selectDocument(index)}
                 style={{ wordBreak: 'break-word' }}
-                role="navigation"
+                role="button"
                 key={index}
               >
                 {ls('doclist') != null ? ls('doclist')[index] : str}
@@ -145,15 +146,17 @@ function App(props) {
             );
           })}
           <a
+            href=""
             className="panel-block has-background-success has-text-white"
-            role="navigation"
+            role="button"
             onClick={createDocument}
           >
               new document
           </a>
           <a
+            href=""
             className="panel-block has-background-danger has-text-white"
-            role="navigation"
+            role="button"
             onClick={async () => {
               await firebase.auth().signOut();
               history.push('/');
