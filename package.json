@@ -12,7 +12,7 @@
       "category": "public.app-category.utilities"
     },
     "linux": {
-        "target": "AppImage"
+      "target": "AppImage"
     },
     "files": [
       "build/**/*",
@@ -37,7 +37,7 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "test": "npm run lint && rescripts test",
+    "test": "npm run lint && rescripts test && jest",
     "lint": "eslint src --ext js,jsx",
     "start": "rescripts start",
     "build": "rescripts build",
@@ -80,6 +80,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
+    "jest": "^24.9.0",
     "typescript": "^3.6.4",
     "wait-on": "^3.3.0"
   },
