@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import ls from 'local-storage';
 import { useHistory, withRouter } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useList } from 'react-firebase-hooks/database';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -44,6 +45,15 @@ function App(props) {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
+  
+  // uListReference.set({
+  //   'uid' : '' + user.uid,
+  //   'documents' : docStorage
+  // });
+  
+  
+  
+  //const [snapshots, loading, errorls] = useList(uListReference);
 
   if (!user) {
     history.push('/');
@@ -54,15 +64,22 @@ function App(props) {
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
-        const item = ls(key);
-        return item != null ? item : initialValue;
+        const lsItem = ls(key);
+        let fbUserRef = firebase.database().ref("users/" + user.uid);
+        let fbItem;
+        fbUserRef.once('value', function(snap){
+          fbItem = snap.val();
+        });
+        
+        return lsItem != null ? lsItem : initialValue;
       } catch (e) { return initialValue; }
     });
 
     const setValue = (value) => {
       try {
-        firebase.database().ref(user).set({
-          
+        //firebase.database().ref("users/" + user.uid);
+        firebase.database().ref('users/' + user.uid).set({
+          'documents' : value
         });
         setStorageValue(value);
         ls(key, value);
@@ -72,7 +89,9 @@ function App(props) {
     };
     return [storedValue, setValue];
   }
+  
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
+  
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
@@ -128,7 +147,7 @@ function App(props) {
       <div className="column is-one-quarter">
         <nav className="panel">
           <p className="panel-heading has-text-centered">
-            documents
+            documents {}
           </p>
           { getDocuments().map((doc, index) => {
             let str = doc.split('\n')[0].trim();
