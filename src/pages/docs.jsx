@@ -64,7 +64,7 @@ function App(props) {
         firebase.database().ref(usrpath).on('value', (snapshot) => {
           const docPath = `users/${user.uid}/documents`;
           fbItem = snapshot.child(docPath).val();
-          const timestampPath = `users/${user.uid}/timestamp`;
+          // const timestampPath = `users/${user.uid}/timestamp`;
           // fbTimeStamp = snapshot.child(timestampPath).val();
         });
         const lsOrInit = lsItem != null ? lsItem : initialValue;
