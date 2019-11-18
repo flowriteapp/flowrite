@@ -11,6 +11,9 @@
     "mac": {
       "category": "public.app-category.utilities"
     },
+    "linux": {
+        "target": "AppImage"
+    },
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -42,7 +45,8 @@
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "npm run build",
-    "electron-pack": "electron-builder -m"
+    "electron-pack": "electron-builder -m",
+    "electron-pack-linux": "electron-builder --linux"
   },
   "rescripts": [
     "env"
