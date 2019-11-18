@@ -134,7 +134,7 @@ function App(props) {
             }
             return (
               <a
-                href=""
+                href={null}
                 className={classnames('panel-block', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
                 onClick={() => selectDocument(index)}
                 style={{ wordBreak: 'break-word' }}
@@ -146,7 +146,7 @@ function App(props) {
             );
           })}
           <a
-            href=""
+            href={null}
             className="panel-block has-background-success has-text-white"
             role="button"
             onClick={createDocument}
@@ -154,7 +154,7 @@ function App(props) {
               new document
           </a>
           <a
-            href=""
+            href={null}
             className="panel-block has-background-danger has-text-white"
             role="button"
             onClick={async () => {
