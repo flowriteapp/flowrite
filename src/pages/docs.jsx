@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import ls from 'local-storage';
 import { useHistory, withRouter } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-//import { useList } from 'react-firebase-hooks/database';
+// import { useList } from 'react-firebase-hooks/database';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -49,21 +49,24 @@ function App(props) {
   if (!user) {
     history.push('/');
   }
-  //let lsTimeStamp = 0;
-  //let fbTimeStamp = 0;
+  // let lsTimeStamp = 0;
+  let fbTimeStamp = 0;
   // key == value in local storage
-  //includes firebase console.log("ERRCHECK");
+  // includes firebase console.log("ERRCHECK");
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
         let fbItem;
-        
-        const [snapshots, loading, errorls] = 
-          useList(firebase.database().ref("users/" + user.uid));
-        firebase.database().ref("users/" + user.uid).on('value', function(snapshot){
-          fbItem = snapshot.child("users/" + user.uid + "/documents").val();
-          fbTimeStamp = snapshot.child("users/" + user.uid + "/timestamp").val();
+
+        // const [snapshots, loading, errorls] =
+        //   useList(firebase.database().ref('users/' + user.uid));
+        const usrpath = 'users/' + user.uid;
+        firebase.database().ref(usrpath).on('value', function (snapshot) {
+          const docPath = 'users/' + user.uid + '/documents';
+          fbItem = snapshot.child(docPath).val();
+          const timestampPath = 'users/' + user.uid + '/timestamp';
+          fbTimeStamp = snapshot.child(timestampPath).val();
         });
         const lsOrInit = lsItem != null ? lsItem : initialValue;
         return fbItem != null ? fbItem : lsOrInit;
@@ -72,10 +75,11 @@ function App(props) {
 
     const setValue = (value) => {
       try {
-        //firebase.database().ref("users/" + user.uid);
-        firebase.database().ref('users/' + user.uid).set({
-          'documents' : value,
-          'timestamp' : Date.now()
+        // firebase.database().ref("users/" + user.uid);
+        const usrpath = 'users/' + user.uid;
+        firebase.database().ref(usrpath).set({
+          documents: value,
+          timestamp: Date.now(),
         });
 
         setStorageValue(value);
@@ -86,11 +90,10 @@ function App(props) {
     };
     return [storedValue, setValue];
   }
-  
-  
+
 
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
-  
+
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
