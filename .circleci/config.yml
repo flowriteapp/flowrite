@@ -36,14 +36,14 @@ jobs:
       - run: npm run build
       
       # run package installation
-      - run: npm run electron-pack
+      - run: npm run electron-pack-linux
       
       # create a concise package
-      - run: mv dist/*.dmg dist/Flowrite.dmg
+      - run: mv dist/*.AppImage dist/Flowrite.AppImage
       
       # store artifacts
       - store_artifacts:
-          path: dist/Flowrite.dmg
+          path: dist/Flowrite.AppImage
 
 workflows:
   version: 2
