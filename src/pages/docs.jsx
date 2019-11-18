@@ -61,7 +61,7 @@ function App(props) {
         // const [snapshots, loading, errorls] =
         //   useList(firebase.database().ref('users/' + user.uid));
         const usrpath = `users/${user.uid}`;
-        firebase.database().ref(usrpath).on('value', const snap = (snapshot) => {
+        firebase.database().ref(usrpath).on('value', (snapshot) => {
           const docPath = `users/${user.uid}/documents`;
           fbItem = snapshot.child(docPath).val();
           const timestampPath = `users/${user.uid}/timestamp`;
