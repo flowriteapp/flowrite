@@ -3,8 +3,12 @@ import React, { useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import ls from 'local-storage';
-import { useHistory, withRouter } from 'react-router-dom';
+import {
+  useHistory, withRouter,
+  Link,
+} from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -164,6 +168,13 @@ function App(props) {
           >
               sign out
           </a>
+          <Link
+            to="/settings"
+            className="panel-block has-background-success has-text-white"
+            role="button"
+          >
+              settings
+          </Link>
         </nav>
       </div>
       <div className="column">
