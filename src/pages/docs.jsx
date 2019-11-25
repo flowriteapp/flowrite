@@ -8,9 +8,18 @@ import {
   Link,
 } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { join } from 'path';
 
 
 import { withFirebase } from '../components/with-firebase';
+
+const exportTxt = (id) => {
+    const electron = window.require('electron');
+    const fs = window.require('fs');
+    const homedir = electron.remote.app.getPath('home');
+    const path = join(homedir, '${id}.txt');
+    fs.writeFileSync(path,getDocument(id));
+};
 
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
@@ -104,6 +113,7 @@ function App(props) {
         <div className="columns has-text-centered is-vcentered">
           <div className="column is-12">
             <p className="is-size-3">loading...</p>
+            <button className="button is-medium has-text-justified" onclick={()=>exportTxt(selectedDocument)}>Export TXT</button>
           </div>
         </div>
       </section>

@@ -12,7 +12,7 @@
       "category": "public.app-category.utilities"
     },
     "linux": {
-        "target": "AppImage"
+      "target": "AppImage"
     },
     "files": [
       "build/**/*",
