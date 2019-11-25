@@ -44,30 +44,33 @@ function App(props) {
 
   return (
     <section className="section">
-        <div className="container is-fluid">
-            <div className="is-fullwidth has-text-centered">
-              <figure className="image" style={{ width: '512px', marginLeft: 'auto', marginRight: 'auto' }}>
-                  <img src={logo} alt="FloWrite logo"/>
-              </figure>
-            </div>
-            <div className="columns has-text-centered">
-              <div className="column  has-text-centered">
-                <h1 className="title is-1">Settings</h1>
-              </div>
-            </div>
+      <div className="container is-fluid">
+        <div className="is-fullwidth has-text-centered">
+          <figure className="image" style={{ width: '512px', marginLeft: 'auto', marginRight: 'auto' }}>
+            <img src={logo} alt="FloWrite logo" />
+          </figure>
         </div>
-        <div className="columns">
-            <div className="column has-text-centered">
-                <h1 className="subtitle">
-                    <a className="has-text-black">Profile</a></h1>
-                <h1 className="subtitle">
-                    <a className="has-text-black">Fading</a></h1>
-                <h1 className="subtitle">
-                    <a className="has-text-black">Export</a></h1>
-                <h1 className="subtitle"><a className="has-text-black">Colors</a></h1>
-                <h1 className="subtitle"><a className="has-text-black">Sign Out</a></h1>
-            </div>
+        <div className="columns has-text-centered">
+          <div className="column  has-text-centered">
+            <h1 className="title is-1">Settings</h1>
+          </div>
         </div>
+      </div>
+      <div className="columns">
+        <div className="column has-text-centered">
+          <h1 className="subtitle">
+            <a className="has-text-black">Profile</a>
+          </h1>
+          <h1 className="subtitle">
+            <a className="has-text-black">Fading</a>
+          </h1>
+          <h1 className="subtitle">
+            <a className="has-text-black">Export</a>
+          </h1>
+          <h1 className="subtitle"><a className="has-text-black">Colors</a></h1>
+          <h1 className="subtitle"><a className="has-text-black">Sign Out</a></h1>
+        </div>
+      </div>
     </section>
   );
 }
