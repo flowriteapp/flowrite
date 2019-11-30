@@ -22,11 +22,12 @@ function DocumentEditor({ document, updateDocument }) {
   };
 
   const html = (d) => {
-    const len = 10;
-    if (d.length < len) {
-      return `<span class="has-text-black">${d}</span>`;
+    const split = d.split(' ');
+    if (split.length <= 2) {
+      return `<span class="has-text-black">${split.join(' ')}</span>`;
     }
-    return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
+    const end = [split.pop(), split.pop()].reverse();
+    return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
   };
 
   return (
@@ -73,16 +74,29 @@ function App(props) {
     };
     return [storedValue, setValue];
   }
-  const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
+  const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
-    setDocStorage([...docStorage, 'asdf']);
+    setDocStorage([...docStorage, '']);
     return docStorage.length - 1;
+  }
+
+  function deleteDocument(id) {
+    setDocStorage(docStorage.filter((x, i) => i !== id));
   }
 
   function getDocument(id) {
     return docStorage[id];
+  }
+
+  function getName(id) {
+    const doc = getDocument(id);
+    let str = doc.split('\n')[0].trim();
+    if (!str || str === '&nbsp') {
+      str = 'empty document';
+    }
+    return str;
   }
 
   function getDocuments() {
@@ -104,7 +118,8 @@ function App(props) {
     const electron = window.require('electron');
     const fs = window.require('fs');
     const homedir = electron.remote.app.getPath('home');
-    const path = join(homedir, `${id}.txt`);
+    const name = getName(id) || id;
+    const path = join(homedir, `${name}.txt`);
     fs.writeFileSync(path, getDocument(id));
   };
 
@@ -149,13 +164,14 @@ function App(props) {
             return (
               <a
                 href={null}
-                className={classnames('panel-block', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
+                className={classnames('panel-block is-fullwidth', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
                 onClick={() => selectDocument(index)}
                 style={{ wordBreak: 'break-word' }}
                 role="button"
                 key={index}
               >
-                {ls('doclist') != null ? ls('doclist')[index] : str}
+                <span style={{ flexGrow: '1' }}>{ str }</span>
+                <a className="has-text-danger" onClick={() => deleteDocument(index)}>x</a>
               </a>
             );
           })}
@@ -163,7 +179,7 @@ function App(props) {
             href={null}
             className="panel-block has-background-success has-text-white"
             role="button"
-            onClick={createDocument}
+            onClick={() => { const id = createDocument(); selectDocument(id); }}
           >
               new document
           </a>
@@ -180,7 +196,7 @@ function App(props) {
           </a>
           <Link
             to="/settings"
-            className="panel-block has-background-success has-text-white"
+            className="panel-block"
             role="button"
           >
               settings
