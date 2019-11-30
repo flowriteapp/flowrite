@@ -45,8 +45,8 @@
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "npm run build",
-    "electron-pack": "electron-builder -m",
-    "electron-pack-linux": "electron-builder --linux"
+    "electron-pack": "electron-builder -m --publish=never",
+    "electron-pack-linux": "electron-builder --linux --publish=never"
   },
   "rescripts": [
     "env"
