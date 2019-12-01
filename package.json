@@ -11,6 +11,9 @@
     "mac": {
       "category": "public.app-category.utilities"
     },
+    "linux": {
+      "target": "AppImage"
+    },
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -37,12 +40,13 @@
     "test": "npm run lint && rescripts test",
     "lint": "eslint src --ext js,jsx",
     "start": "rescripts start",
-    "build": "rescripts build",
+    "build": "CI=\"\" rescripts build",
     "eject": "react-scripts eject",
     "dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "npm run build",
-    "electron-pack": "electron-builder -m"
+    "electron-pack": "electron-builder -m --publish=never",
+    "electron-pack-linux": "electron-builder --linux --publish=never"
   },
   "rescripts": [
     "env"
