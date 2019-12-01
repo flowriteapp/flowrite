@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+import logo from '../logo.png';
+
 import { withFirebase } from '../components/with-firebase';
 
 
@@ -75,8 +77,8 @@ function Auth(props) {
         <div className="columns is-desktop is-vcentered">
           <div className="column is-4 is-offset-one-third has-background-white">
             <div className="container is-fluid has-text-centered">
-              <figure className="image is-96x96 is-inline-block">
-                <img src="images/flowrite.jpg" alt="FloWrite logo" />
+              <figure className="image is-inline-block">
+                <img src={logo} alt="FloWrite logo" style={{ width: '256px' }} />
               </figure>
               <h1 className="title">Welcome to FloWrite</h1>
               <p className="subtitle is-6">
@@ -103,9 +105,9 @@ function Auth(props) {
                 </div>
                 <p className="subtitle is-link is-6">
                   { register ? (
-                    <a className="login has-text-link" role="signin" onClick={() => setRegister(false)}>Already a member? Click here.</a>
+                    <a href={null} className="login has-text-link" role="button" onClick={() => setRegister(false)}>Already a member? Click here.</a>
                   ) : (
-                    <a className="login has-text-link" role="register" onClick={() => setRegister(true)}>Need to make an account? Click here.</a>
+                    <a href={null} className="login has-text-link" role="button" onClick={() => setRegister(true)}>Need to make an account? Click here.</a>
                   ) }
                 </p>
               </form>

@@ -1,11 +1,16 @@
 /* eslint-disable class-methods-use-this, react/prop-types, react/no-array-index-key */
+/* global window */
 import React, { useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import ls from 'local-storage';
-import { useHistory, withRouter } from 'react-router-dom';
+import {
+  useHistory, withRouter,
+  Link,
+} from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-// import { useList } from 'react-firebase-hooks/database';
+
+import { join } from 'path';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -17,11 +22,12 @@ function DocumentEditor({ document, updateDocument }) {
   };
 
   const html = (d) => {
-    const len = 10;
-    if (d.length < len) {
-      return `<span class="has-text-black">${d}</span>`;
+    const split = d.split(' ');
+    if (split.length <= 2) {
+      return `<span class="has-text-black">${split.join(' ')}</span>`;
     }
-    return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
+    const end = [split.pop(), split.pop()].reverse();
+    return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
   };
 
   return (
@@ -90,18 +96,29 @@ function App(props) {
     return [storedValue, setValue];
   }
 
-
-  const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
-
+  const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
-    setDocStorage([...docStorage, 'new document']);
+    setDocStorage([...docStorage, '']);
     return docStorage.length - 1;
+  }
+
+  function deleteDocument(id) {
+    setDocStorage(docStorage.filter((x, i) => i !== id));
   }
 
   function getDocument(id) {
     return docStorage[id];
+  }
+
+  function getName(id) {
+    const doc = getDocument(id);
+    let str = doc.split('\n')[0].trim();
+    if (!str || str === '&nbsp') {
+      str = 'empty document';
+    }
+    return str;
   }
 
   function getDocuments() {
@@ -118,6 +135,15 @@ function App(props) {
       }));
     };
   }
+
+  const exportTxt = (id) => {
+    const electron = window.require('electron');
+    const fs = window.require('fs');
+    const homedir = electron.remote.app.getPath('home');
+    const name = getName(id) || id;
+    const path = join(homedir, `${name}.txt`);
+    fs.writeFileSync(path, getDocument(id));
+  };
 
   if (initialising) {
     return (
@@ -159,26 +185,30 @@ function App(props) {
             }
             return (
               <a
-                className={classnames('panel-block', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
+                href={null}
+                className={classnames('panel-block is-fullwidth', { 'has-text-grey': newDoc, 'bg-black': index === selectedDocument })}
                 onClick={() => selectDocument(index)}
                 style={{ wordBreak: 'break-word' }}
-                role="navigation"
+                role="button"
                 key={index}
               >
-                {ls('doclist') != null ? ls('doclist')[index] : str}
+                <span style={{ flexGrow: '1' }}>{ str }</span>
+                <a className="has-text-danger" onClick={() => deleteDocument(index)}>x</a>
               </a>
             );
           })}
           <a
+            href={null}
             className="panel-block has-background-success has-text-white"
-            role="navigation"
-            onClick={createDocument}
+            role="button"
+            onClick={() => { const id = createDocument(); selectDocument(id); }}
           >
               new document
           </a>
           <a
+            href={null}
             className="panel-block has-background-danger has-text-white"
-            role="navigation"
+            role="button"
             onClick={async () => {
               await firebase.auth().signOut();
               history.push('/');
@@ -186,6 +216,13 @@ function App(props) {
           >
               sign out
           </a>
+          <Link
+            to="/settings"
+            className="panel-block"
+            role="button"
+          >
+              settings
+          </Link>
         </nav>
       </div>
       <div className="column">
@@ -193,6 +230,7 @@ function App(props) {
           document={getDocument(selectedDocument)}
           updateDocument={updateDocument(selectedDocument)}
         />
+        <button type="button" className="button is-medium has-text-justified" onClick={() => exportTxt(selectedDocument)}>Export TXT</button>
       </div>
     </div>
   );
