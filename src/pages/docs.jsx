@@ -11,7 +11,10 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { join } from 'path';
 
-import { Document, Packer, Paragraph, TextRun } from "docx";
+import {
+  Document, Packer, Paragraph, TextRun
+  
+} from 'docx';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -122,9 +125,9 @@ function App(props) {
     const name = getName(id) || id;
     const path = join(homedir, `${name}.txt`);
     fs.writeFileSync(path, getDocument(id));
-};
+  };
 
- const exportDocx = (id) => {
+  const exportDocx = (id) => {
     const electron = window.require('electron');
     const fs = window.require('fs');
     const homedir = electron.remote.app.getPath('home');
