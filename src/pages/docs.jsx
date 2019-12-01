@@ -5,10 +5,12 @@ import classnames from 'classnames';
 import ls from 'local-storage';
 import { useHistory, withRouter } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-// import { useList } from 'react-firebase-hooks/database';
+
+//import SpellCheckHandler from 'electron-spellchecker';
 
 import { withFirebase } from '../components/with-firebase';
 
+let spellcheck = false;
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
 
@@ -19,7 +21,7 @@ function DocumentEditor({ document, updateDocument }) {
   const html = (d) => {
     const len = 10;
     if (d.length < len) {
-      return `<span class="has-text-black">${d}</span>`;
+      return `<span spellCheck class="has-text-black">${d}</span>`;
     }
     return `<span class="has-text-white">${d.substring(0, d.length - len + 1)}</span><span class="has-text-black">${d.substring(d.length - len + 1, d.length)}</span>`;
   };
@@ -33,6 +35,7 @@ function DocumentEditor({ document, updateDocument }) {
         disabled={false}
         onChange={handleChange}
         tagName="doc-editor"
+        spellCheck={spellcheck}
       />
     </div>
   );
@@ -49,23 +52,18 @@ function App(props) {
   if (!user) {
     history.push('/');
   }
-  // let lsTimeStamp = 0;
-  // let fbTimeStamp = 0;
-  // key == value in local storage
-  // includes firebase console.log("ERRCHECK");
+  
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
         let fbItem;
-        // const [snapshots, loading, errorls] =
-        //   useList(firebase.database().ref('users/' + user.uid));
+        
         const usrpath = `users/${user.uid}`;
         firebase.database().ref(usrpath).on('value', (snapshot) => {
           const docPath = `users/${user.uid}/documents`;
           fbItem = snapshot.child(docPath).val();
-          // const timestampPath = `users/${user.uid}/timestamp`;
-          // fbTimeStamp = snapshot.child(timestampPath).val();
+          
         });
         const lsOrInit = lsItem != null ? lsItem : initialValue;
         return fbItem != null ? fbItem : lsOrInit;
@@ -94,6 +92,8 @@ function App(props) {
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['hi', 'hello']);
 
   const [selectedDocument, selectDocument] = useState(0);
+  
+  
 
   function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, 'new document']);
@@ -147,8 +147,8 @@ function App(props) {
     <div className="columns">
       <div className="column is-one-quarter">
         <nav className="panel">
-          <p className="panel-heading has-text-centered">
-            documents list view
+          <p spellCheck={spellcheck} className="panel-heading has-text-centered">
+            documents
           </p>
           { getDocuments().map((doc, index) => {
             let str = doc.split('\n')[0].trim();
@@ -164,8 +164,9 @@ function App(props) {
                 style={{ wordBreak: 'break-word' }}
                 role="navigation"
                 key={index}
+                
               >
-                {ls('doclist') != null ? ls('doclist')[index] : str}
+                {docStorage != null ? docStorage[index] : str}
               </a>
             );
           })}
@@ -175,6 +176,13 @@ function App(props) {
             onClick={createDocument}
           >
               new document
+          </a>
+          <a
+            className="panel-block has-background-primary has-text-white"
+            role="navigation"
+            onClick={() => {spellcheck = !spellcheck}}
+          >
+              toggle spellcheck
           </a>
           <a
             className="panel-block has-background-danger has-text-white"
@@ -199,3 +207,4 @@ function App(props) {
 }
 
 export default withRouter(withFirebase(App));
+
