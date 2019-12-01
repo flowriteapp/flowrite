@@ -8,6 +8,7 @@ import {
   useHistory, withRouter,
   Link,
 } from 'react-router-dom';
+
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { join } from 'path';
@@ -190,7 +191,7 @@ function App(props) {
               >
                 
                 <span style={{ flexGrow: '1' }}>{ str }</span>
-                <a className="has-text-danger" onClick={() => deleteDocument(index)}>x</a>
+                <div className="has-text-danger" onClick={() => deleteDocument(index)}>x</div>
               </a>
             );
           })}
