@@ -48,7 +48,6 @@ function DocumentEditor({ document, updateDocument }) {
   );
 }
 
-
 function App(props) {
   const history = useHistory();
   const { firebase } = props;
@@ -134,15 +133,14 @@ function App(props) {
     const name = getName(id) || id;
     const path = join(homedir, `${name}.docx`);
     const doc = new Document();
+    const lines = getDocument(id).split('\n');
     doc.addSection({
       properties: {},
-      children: [
-        new Paragraph({
-          children: [
-            new TextRun(getDocument(id)),
-          ],
-        }),
-      ],
+      children: lines.map((line) => (new Paragraph({
+        children: [
+          new TextRun(line),
+        ],
+      }))),
     });
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(path, buffer);
