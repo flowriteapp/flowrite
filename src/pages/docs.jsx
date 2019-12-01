@@ -12,8 +12,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { join } from 'path';
 
 import {
-  Document, Packer, Paragraph, TextRun
-  
+  Document, Packer, Paragraph, TextRun,
+
 } from 'docx';
 
 import { withFirebase } from '../components/with-firebase';
@@ -135,20 +135,20 @@ function App(props) {
     const path = join(homedir, `${name}.docx`);
     const doc = new Document();
     doc.addSection({
-        properties: {},
-        children: [
-            new Paragraph({
-                children: [
-                    new TextRun(getDocument(id)),
-                ],
-            }),
-        ],
+      properties: {},
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun(getDocument(id)),
+          ],
+        }),
+      ],
     });
     Packer.toBuffer(doc).then((buffer) => {
-        fs.writeFileSync(path, buffer);
+      fs.writeFileSync(path, buffer);
     });
-};
-    
+  };
+
   if (initialising) {
     return (
       <section className="section is-medium">
