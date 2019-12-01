@@ -55,23 +55,18 @@ function App(props) {
   if (!user) {
     history.push('/');
   }
-  // let lsTimeStamp = 0;
-  // let fbTimeStamp = 0;
-  // key == value in local storage
-  // includes firebase console.log("ERRCHECK");
+
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
         let fbItem;
-        // const [snapshots, loading, errorls] =
-        //   useList(firebase.database().ref('users/' + user.uid));
+
         const usrpath = `users/${user.uid}`;
         firebase.database().ref(usrpath).on('value', (snapshot) => {
           const docPath = `users/${user.uid}/documents`;
           fbItem = snapshot.child(docPath).val();
-          // const timestampPath = `users/${user.uid}/timestamp`;
-          // fbTimeStamp = snapshot.child(timestampPath).val();
+
         });
         const lsOrInit = lsItem != null ? lsItem : initialValue;
         return fbItem != null ? fbItem : lsOrInit;
@@ -80,7 +75,7 @@ function App(props) {
 
     const setValue = (value) => {
       try {
-        // firebase.database().ref("users/" + user.uid);
+
         const usrpath = `users/${user.uid}`;
         firebase.database().ref(usrpath).set({
           documents: value,
@@ -174,7 +169,7 @@ function App(props) {
       <div className="column is-one-quarter">
         <nav className="panel">
           <p className="panel-heading has-text-centered">
-            documents list view
+            documents
           </p>
           { getDocuments().map((doc, index) => {
             let str = doc.split('\n')[0].trim();
