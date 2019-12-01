@@ -25,6 +25,7 @@
   "dependencies": {
     "bulma": "^0.8.0",
     "classnames": "^2.2.6",
+    "docx": "^5.0.0-rc7",
     "electron-is-dev": "^1.1.0",
     "electron-store": "5.0.0",
     "firebase": "^7.5.0",
