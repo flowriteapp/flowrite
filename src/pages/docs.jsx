@@ -22,31 +22,44 @@ import { withFirebase } from '../components/with-firebase';
 let spellcheck = false;
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
+  const [fading, setFading] = useState(true);
 
   const handleChange = () => {
     updateDocument(docRef.current.innerText.trimLeft());
   };
 
   const html = (d) => {
-    const split = d.split(' ');
-    if (split.length <= 2) {
-      return `<span class="has-text-black">${split.join(' ')}</span>`;
+    if (fading) {
+      const split = d.split(' ');
+      if (split.length <= 2) {
+        return `<span class="has-text-black">${split.join(' ')}</span>`;
+      }
+      const end = [split.pop(), split.pop()].reverse();
+      return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
     }
-    const end = [split.pop(), split.pop()].reverse();
-    return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
+    return `<span class="has-text-black">${d}</span>`;
   };
 
   return (
-    <div className="panel container" style={{ padding: '1.5rem 1.5rem' }}>
-      <ContentEditable
-        innerRef={docRef}
-        html={html(document) || '&nbsp;'}
-        style={{ outline: '0px solid transparent', whiteSpace: 'pre-wrap' }}
-        disabled={false}
-        onChange={handleChange}
-        tagName="doc-editor"
-        spellCheck={spellcheck}
-      />
+    <div>
+      <div className="panel container" style={{ padding: '1.5rem 1.5rem' }}>
+        <ContentEditable
+          innerRef={docRef}
+          html={html(document) || '&nbsp;'}
+          style={{ outline: '0px solid transparent', whiteSpace: 'pre-wrap' }}
+          disabled={false}
+          onChange={handleChange}
+          tagName="doc-editor"
+          spellCheck={spellcheck}
+        />
+      </div>
+      <div className="container" style={{ paddingBottom: '1.5rem' }}>
+        { fading ? (
+          <button type="button" className="button is-dark" onClick={() => setFading(false)}>Fading On</button>
+        ) : (
+          <button type="button" className="button is-light" onClick={() => setFading(true)}>Fading Off</button>
+        )}
+      </div>
     </div>
   );
 }
@@ -185,6 +198,10 @@ function App(props) {
         </div>
       </section>
     );
+  }
+
+  if (docStorage.length === 0) {
+    createDocument();
   }
 
   return (
