@@ -99,7 +99,7 @@ function App(props) {
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        console.log(e);
+        // handle e
       }
     };
     return [storedValue, setValue];
