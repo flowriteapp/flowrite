@@ -95,8 +95,6 @@ function App(props) {
 
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
   const [selectedDocument, selectDocument] = useState(0);
-  
-  
 
   function createDocument() { // eslint-disable-line
     setDocStorage([...docStorage, '']);
@@ -211,9 +209,9 @@ function App(props) {
                 style={{ wordBreak: 'break-word' }}
                 role="button"
                 key={index}
-                
+
               >
-                
+
                 <span style={{ flexGrow: '1' }}>{ str }</span>
                 <div className="has-text-danger" onClick={() => deleteDocument(index)}>x</div>
               </a>
@@ -230,7 +228,7 @@ function App(props) {
           <a
             className="panel-block has-background-primary has-text-white"
             role="navigation"
-            onClick={() => {spellcheck = !spellcheck}}
+            onClick= { () => { spellcheck = !spellcheck; } }
           >
               toggle spellcheck
           </a>
@@ -267,4 +265,3 @@ function App(props) {
 }
 
 export default withRouter(withFirebase(App));
-
