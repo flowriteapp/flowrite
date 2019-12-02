@@ -8,9 +8,10 @@ import {
   useHistory, withRouter,
   Link,
 } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { join } from 'path';
 
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { join } from 'path';
 import {
   Document, Packer, Paragraph, TextRun,
 
@@ -18,6 +19,7 @@ import {
 
 import { withFirebase } from '../components/with-firebase';
 
+let spellcheck = false;
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
 
@@ -43,6 +45,7 @@ function DocumentEditor({ document, updateDocument }) {
         disabled={false}
         onChange={handleChange}
         tagName="doc-editor"
+        spellCheck={spellcheck}
       />
     </div>
   );
@@ -54,29 +57,42 @@ function App(props) {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
+
   if (!user) {
     history.push('/');
   }
-
-  // key == value in local storage
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
-        const item = ls(key);
-        return item != null ? item : initialValue;
+        const lsItem = ls(key);
+        let fbItem;
+        const usrpath = `users/${user.uid}`;
+        firebase.database().ref(usrpath).on('value', (snapshot) => {
+          const docPath = `users/${user.uid}/documents`;
+          fbItem = snapshot.child(docPath).val();
+        });
+        const lsOrInit = lsItem != null ? lsItem : initialValue;
+        return fbItem != null ? fbItem : lsOrInit;
       } catch (e) { return initialValue; }
     });
 
     const setValue = (value) => {
       try {
+        const usrpath = `users/${user.uid}`;
+        firebase.database().ref(usrpath).set({
+          documents: value,
+          timestamp: Date.now(),
+        });
+
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        // do something with error
+        // handle e
       }
     };
     return [storedValue, setValue];
   }
+
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
   const [selectedDocument, selectDocument] = useState(0);
 
@@ -193,9 +209,11 @@ function App(props) {
                 style={{ wordBreak: 'break-word' }}
                 role="button"
                 key={index}
+
               >
+
                 <span style={{ flexGrow: '1' }}>{ str }</span>
-                <a className="has-text-danger" onClick={() => deleteDocument(index)}>x</a>
+                <div className="has-text-danger" onClick={() => deleteDocument(index)}>x</div>
               </a>
             );
           })}
@@ -206,6 +224,13 @@ function App(props) {
             onClick={() => { const id = createDocument(); selectDocument(id); }}
           >
               new document
+          </a>
+          <a
+            className="panel-block has-background-primary has-text-white"
+            role="navigation"
+            onClick={() => { spellcheck = !spellcheck; }}
+          >
+              toggle spellcheck
           </a>
           <a
             href={null}
