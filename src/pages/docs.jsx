@@ -30,7 +30,7 @@ function DocumentEditor({ document, updateDocument }) {
     if (!d) {
       return '';
     }
-        
+
     if (fading) {
       const split = d.split(' ');
       if (split.length <= 2) {
@@ -102,7 +102,7 @@ function App(props) {
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        console.log(e);
+        console.log(e); // eslint-disable-line
       }
     };
     return [storedValue, setValue];
