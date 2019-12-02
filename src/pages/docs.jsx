@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this, react/prop-types, react/no-array-index-key */
 /* global window */
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import classnames from 'classnames';
 import ls from 'local-storage';
@@ -76,23 +76,15 @@ function App(props) {
   }
 
   function useLocalStorage(key, initialValue) {
-    if(user){
+    if (user) {
       userId = user.uid;
     }
-    const [storedValue, setStorageValue] = useState( () => {
+    const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
-        let fbItem = initialValue;
-        
-        
-        // const docRef =  firebase.database().ref(`users/${user.uid}/documents`);
-        // const snap = docRef.once('value');console.log(fbItem, "AWDAWD");
-        // fbItem = snap.val();
-        
-
-        //console.log("THERE", fbItem, lsItem);
-        const lsOrInit = lsItem != null ? lsItem : initialValue;
-        return fbItem != null && fbItem != initialValue ? fbItem : lsOrInit;
+        const fbItem = initialValue;
+        const lsOrInit = lsItem !== null ? lsItem : initialValue;
+        return fbItem !== null ? fbItem : lsOrInit;
       } catch (e) { return initialValue; }
     });
 
@@ -107,7 +99,7 @@ function App(props) {
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        // handle e
+        console.log(e);
       }
     };
     return [storedValue, setValue];
@@ -120,12 +112,11 @@ function App(props) {
     const getFirebaseData = async () => {
       const docRef = await firebase.database().ref(`users/${userId}/documents`);
       const snap = await docRef.once('value');
-      let fbItem = await snap.val();
-      
+      const fbItem = await snap.val();
       const documentSet = fbItem != null ? fbItem : docStorage;
       setDocStorage(documentSet);
       return documentSet;
-    }
+    };
     getFirebaseData();
     setSync(true);
   }
