@@ -30,7 +30,7 @@ function DocumentEditor({ document, updateDocument }) {
     if (!d) {
       return '';
     }
-
+        
     if (fading) {
       const split = d.split(' ');
       if (split.length <= 2) {
@@ -39,6 +39,7 @@ function DocumentEditor({ document, updateDocument }) {
       const end = [split.pop(), split.pop()].reverse();
       return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
     }
+
     return `<span class="has-text-black">${d}</span>`;
   };
 
@@ -72,22 +73,21 @@ function App(props) {
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
-
+  let userId = 0;
   if (!user) {
     history.push('/');
   }
+
   function useLocalStorage(key, initialValue) {
+    if (user) {
+      userId = user.uid;
+    }
     const [storedValue, setStorageValue] = useState(() => {
       try {
         const lsItem = ls(key);
-        let fbItem;
-        const usrpath = `users/${user.uid}`;
-        firebase.database().ref(usrpath).on('value', (snapshot) => {
-          const docPath = `users/${user.uid}/documents`;
-          fbItem = snapshot.child(docPath).val();
-        });
-        const lsOrInit = lsItem != null ? lsItem : initialValue;
-        return fbItem != null ? fbItem : lsOrInit;
+        const fbItem = initialValue;
+        const lsOrInit = lsItem !== null ? lsItem : initialValue;
+        return fbItem !== null ? fbItem : lsOrInit;
       } catch (e) { return initialValue; }
     });
 
@@ -102,13 +102,28 @@ function App(props) {
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        // handle e
+        console.log(e);
       }
     };
     return [storedValue, setValue];
   }
 
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
+  const [synced, setSync] = useState(false);
+
+  if (user && !synced) {
+    const getFirebaseData = async () => {
+      const docRef = await firebase.database().ref(`users/${userId}/documents`);
+      const snap = await docRef.once('value');
+      const fbItem = await snap.val();
+      const documentSet = fbItem != null ? fbItem : docStorage;
+      setDocStorage(documentSet);
+      return documentSet;
+    };
+    getFirebaseData();
+    setSync(true);
+  }
+
   const [selectedDocument, selectDocument] = useState(0);
 
   function createDocument() { // eslint-disable-line
