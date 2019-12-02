@@ -10,16 +10,12 @@ import {
 
 import Auth from './pages/index';
 import Docs from './pages/docs';
-import Settings from './pages/settings';
 
 function App() {
   return (
     <section className="section App container">
       <Router>
         <Switch>
-          <Route path="/settings">
-            <Settings />
-          </Route>
           <Route path="/docs">
             <Docs />
           </Route>
