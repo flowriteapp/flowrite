@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import ls from 'local-storage';
 import {
   useHistory, withRouter,
-  Link,
 } from 'react-router-dom';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -19,7 +18,6 @@ import {
 
 import { withFirebase } from '../components/with-firebase';
 
-let spellcheck = false;
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
   const [fading, setFading] = useState(true);
@@ -29,6 +27,10 @@ function DocumentEditor({ document, updateDocument }) {
   };
 
   const html = (d) => {
+    if (!d) {
+      return '';
+    }
+        
     if (fading) {
       const split = d.split(' ');
       if (split.length <= 2) {
@@ -37,6 +39,7 @@ function DocumentEditor({ document, updateDocument }) {
       const end = [split.pop(), split.pop()].reverse();
       return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
     }
+
     return `<span class="has-text-black">${d}</span>`;
   };
 
@@ -50,7 +53,7 @@ function DocumentEditor({ document, updateDocument }) {
           disabled={false}
           onChange={handleChange}
           tagName="doc-editor"
-          spellCheck={spellcheck}
+          spellcheck={fading}
         />
       </div>
       <div className="container" style={{ paddingBottom: '1.5rem' }}>
@@ -252,16 +255,9 @@ function App(props) {
             href={null}
             className="panel-block has-background-success has-text-white"
             role="button"
-            onClick={() => { const id = createDocument(); selectDocument(id); }}
+            onClick={() => { const id = createDocument(); selectDocument(id + 1); }}
           >
               new document
-          </a>
-          <a
-            className="panel-block has-background-primary has-text-white"
-            role="navigation"
-            onClick={() => { spellcheck = !spellcheck; }}
-          >
-              toggle spellcheck
           </a>
           <a
             href={null}
@@ -274,13 +270,6 @@ function App(props) {
           >
               sign out
           </a>
-          <Link
-            to="/settings"
-            className="panel-block"
-            role="button"
-          >
-              settings
-          </Link>
         </nav>
       </div>
       <div className="column">
