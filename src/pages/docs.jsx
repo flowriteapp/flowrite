@@ -16,7 +16,7 @@ import { withFirebase } from '../components/with-firebase';
 
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
-  const [fading, setFading] = useState(true)
+  const [fading, setFading] = useState(true);
 
   const handleChange = () => {
     updateDocument(docRef.current.innerText.trimLeft());
@@ -31,7 +31,7 @@ function DocumentEditor({ document, updateDocument }) {
       const end = [split.pop(), split.pop()].reverse();
       return `<span class="has-text-white">${split.join(' ')}</span> <span class="has-text-black">${end.join(' ')}</span>`;
     }
-    return `<span class="has-text-black">${d}</span>`
+    return `<span class="has-text-black">${d}</span>`;
   };
 
   return (
@@ -48,9 +48,9 @@ function DocumentEditor({ document, updateDocument }) {
       </div>
       <div className="container" style={{ paddingBottom: '1.5rem' }}>
         { fading ? (
-          <button className="button is-dark" onClick={() => setFading(false)}>Fading On</button>
+          <button type="button" className="button is-dark" onClick={() => setFading(false)}>Fading On</button>
         ) : (
-          <button className="button is-light" onClick={() => setFading(true)}>Fading Off</button>
+          <button type="button" className="button is-light" onClick={() => setFading(true)}>Fading Off</button>
         )}
       </div>
     </div>
