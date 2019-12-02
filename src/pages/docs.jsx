@@ -8,12 +8,18 @@ import {
   useHistory, withRouter,
   Link,
 } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { join } from 'path';
 
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { join } from 'path';
+import {
+  Document, Packer, Paragraph, TextRun,
+
+} from 'docx';
 
 import { withFirebase } from '../components/with-firebase';
 
+let spellcheck = false;
 function DocumentEditor({ document, updateDocument }) {
   const docRef = useRef(null);
   const [fading, setFading] = useState(true);
@@ -44,6 +50,7 @@ function DocumentEditor({ document, updateDocument }) {
           disabled={false}
           onChange={handleChange}
           tagName="doc-editor"
+          spellCheck={spellcheck}
         />
       </div>
       <div className="container" style={{ paddingBottom: '1.5rem' }}>
@@ -57,36 +64,48 @@ function DocumentEditor({ document, updateDocument }) {
   );
 }
 
-
 function App(props) {
   const history = useHistory();
   const { firebase } = props;
 
   const [user, initialising, error] = useAuthState(firebase.auth());
 
+
   if (!user) {
     history.push('/');
   }
-
-  // key == value in local storage
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStorageValue] = useState(() => {
       try {
-        const item = ls(key);
-        return item != null ? item : initialValue;
+        const lsItem = ls(key);
+        let fbItem;
+        const usrpath = `users/${user.uid}`;
+        firebase.database().ref(usrpath).on('value', (snapshot) => {
+          const docPath = `users/${user.uid}/documents`;
+          fbItem = snapshot.child(docPath).val();
+        });
+        const lsOrInit = lsItem != null ? lsItem : initialValue;
+        return fbItem != null ? fbItem : lsOrInit;
       } catch (e) { return initialValue; }
     });
 
     const setValue = (value) => {
       try {
+        const usrpath = `users/${user.uid}`;
+        firebase.database().ref(usrpath).set({
+          documents: value,
+          timestamp: Date.now(),
+        });
+
         setStorageValue(value);
         ls(key, value);
       } catch (e) {
-        // do something with error
+        // handle e
       }
     };
     return [storedValue, setValue];
   }
+
   const [docStorage, setDocStorage] = useLocalStorage('doclist', ['Welcome!']);
   const [selectedDocument, selectDocument] = useState(0);
 
@@ -134,6 +153,27 @@ function App(props) {
     const name = getName(id) || id;
     const path = join(homedir, `${name}.txt`);
     fs.writeFileSync(path, getDocument(id));
+  };
+
+  const exportDocx = (id) => {
+    const electron = window.require('electron');
+    const fs = window.require('fs');
+    const homedir = electron.remote.app.getPath('home');
+    const name = getName(id) || id;
+    const path = join(homedir, `${name}.docx`);
+    const doc = new Document();
+    const lines = getDocument(id).split('\n');
+    doc.addSection({
+      properties: {},
+      children: lines.map((line) => (new Paragraph({
+        children: [
+          new TextRun(line),
+        ],
+      }))),
+    });
+    Packer.toBuffer(doc).then((buffer) => {
+      fs.writeFileSync(path, buffer);
+    });
   };
 
   if (initialising) {
@@ -186,9 +226,11 @@ function App(props) {
                 style={{ wordBreak: 'break-word' }}
                 role="button"
                 key={index}
+
               >
+
                 <span style={{ flexGrow: '1' }}>{ str }</span>
-                <a className="has-text-danger" onClick={() => deleteDocument(index)}>x</a>
+                <div className="has-text-danger" onClick={() => deleteDocument(index)}>x</div>
               </a>
             );
           })}
@@ -199,6 +241,13 @@ function App(props) {
             onClick={() => { const id = createDocument(); selectDocument(id); }}
           >
               new document
+          </a>
+          <a
+            className="panel-block has-background-primary has-text-white"
+            role="navigation"
+            onClick={() => { spellcheck = !spellcheck; }}
+          >
+              toggle spellcheck
           </a>
           <a
             href={null}
@@ -226,6 +275,7 @@ function App(props) {
           updateDocument={updateDocument(selectedDocument)}
         />
         <button type="button" className="button is-medium has-text-justified" onClick={() => exportTxt(selectedDocument)}>Export TXT</button>
+        <button type="button" className="button is-medium has-text-justified" onClick={() => exportDocx(selectedDocument)}>Export DOCX</button>
       </div>
     </div>
   );
