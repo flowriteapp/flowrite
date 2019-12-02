@@ -1,5 +1,3 @@
-// import React from 'react';
-import renderer from 'react-test-renderer';
 import {
   html,
   createDocument,
@@ -31,7 +29,7 @@ it('makes text disappear properly', () => {
   expect(htmlFourWords).toBe(htmlExpected.fours);
 });
 
-var docStorage = ['Welcome!'];
+let docStorage = ['Welcome!'];
 const setDocStorage = (value) => {
   docStorage = value;
 };
@@ -61,7 +59,6 @@ describe('document manipulation', () => {
 
   it('gets all documents', () => {
     const docs = getDocuments(docStorage);
-    console.log(docs);
     expect(docs).toEqual(['Welcome!']);
   });
 
