@@ -48,9 +48,9 @@ function DocumentEditor({ document, updateDocument }) {
       </div>
       <div className="container" style={{ paddingBottom: '1.5rem' }}>
         { fading ? (
-          <button class="button is-dark" onClick={() => setFading(false)}>Fading On</button>
+          <button className="button is-dark" onClick={() => setFading(false)}>Fading On</button>
         ) : (
-          <button class="button is-light" onClick={() => setFading(true)}>Fading Off</button>
+          <button className="button is-light" onClick={() => setFading(true)}>Fading Off</button>
         )}
       </div>
     </div>
@@ -158,6 +158,10 @@ function App(props) {
         </div>
       </section>
     );
+  }
+
+  if (docStorage.length === 0) {
+    createDocument();
   }
 
   return (
