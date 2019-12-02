@@ -228,7 +228,7 @@ function App(props) {
           <a
             className="panel-block has-background-primary has-text-white"
             role="navigation"
-            onClick= { () => { spellcheck = !spellcheck; } }
+            onClick={() => { spellcheck = !spellcheck; }}
           >
               toggle spellcheck
           </a>
