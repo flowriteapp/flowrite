@@ -285,14 +285,3 @@ function App(props) {
 }
 
 export default withRouter(withFirebase(App));
-          document={getDocument(selectedDocument)}
-          updateDocument={updateDocument(selectedDocument)}
-        />
-        <button type="button" className="button is-medium has-text-justified" onClick={() => exportTxt(selectedDocument)}>Export TXT</button>
-        <button type="button" className="button is-medium has-text-justified" onClick={() => exportDocx(selectedDocument)}>Export DOCX</button>
-      </div>
-    </div>
-  );
-}
-
-export default withRouter(withFirebase(App));
