@@ -53,7 +53,7 @@ function DocumentEditor({ document, updateDocument }) {
           disabled={false}
           onChange={handleChange}
           tagName="doc-editor"
-          spellcheck={fading}
+          spellcheck={!fading}
         />
       </div>
       <div className="container" style={{ paddingBottom: '1.5rem' }}>
