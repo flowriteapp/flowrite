@@ -12,6 +12,10 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { join } from 'path';
+import {
+  Document, Packer, Paragraph, TextRun,
+
+} from 'docx';
 
 import { withFirebase } from '../components/with-firebase';
 
@@ -46,7 +50,6 @@ function DocumentEditor({ document, updateDocument }) {
     </div>
   );
 }
-
 
 function App(props) {
   const history = useHistory();
@@ -139,6 +142,27 @@ function App(props) {
     const name = getName(id) || id;
     const path = join(homedir, `${name}.txt`);
     fs.writeFileSync(path, getDocument(id));
+  };
+
+  const exportDocx = (id) => {
+    const electron = window.require('electron');
+    const fs = window.require('fs');
+    const homedir = electron.remote.app.getPath('home');
+    const name = getName(id) || id;
+    const path = join(homedir, `${name}.docx`);
+    const doc = new Document();
+    const lines = getDocument(id).split('\n');
+    doc.addSection({
+      properties: {},
+      children: lines.map((line) => (new Paragraph({
+        children: [
+          new TextRun(line),
+        ],
+      }))),
+    });
+    Packer.toBuffer(doc).then((buffer) => {
+      fs.writeFileSync(path, buffer);
+    });
   };
 
   if (initialising) {
@@ -236,6 +260,7 @@ function App(props) {
           updateDocument={updateDocument(selectedDocument)}
         />
         <button type="button" className="button is-medium has-text-justified" onClick={() => exportTxt(selectedDocument)}>Export TXT</button>
+        <button type="button" className="button is-medium has-text-justified" onClick={() => exportDocx(selectedDocument)}>Export DOCX</button>
       </div>
     </div>
   );
