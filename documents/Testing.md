@@ -1,4 +1,4 @@
-### DISCLAIMER: Firebase module is unable to be tested due to lack of support for mocking Firebase.
+ ### DISCLAIMER: Firebase module is unable to be tested due to lack of support for mocking Firebase.
 
 ## Modules tested:
 
